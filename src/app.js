@@ -3,7 +3,14 @@ import ReactDOM from 'react-dom'
 
 import Chaffle from 'react-chaffle'
 
-var App = (<Chaffle>Almost simplest app ever!</Chaffle>)
+var Spinner = () => <i className="fa fa-spinner fa-pulse"/>
+
+var App = (
+	<span>
+		<Spinner/>
+		<Chaffle> Loading something ...</Chaffle>
+	</span>
+	)
 
 export default App
 

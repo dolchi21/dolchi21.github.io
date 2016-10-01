@@ -19,10 +19,19 @@ var _reactChaffle = require('react-chaffle');
 
 var _reactChaffle2 = _interopRequireDefault(_reactChaffle);
 
+var Spinner = function Spinner() {
+	return _react2['default'].createElement('i', { className: 'fa fa-spinner fa-pulse' });
+};
+
 var App = _react2['default'].createElement(
-	_reactChaffle2['default'],
+	'span',
 	null,
-	'Almost simplest app ever!'
+	_react2['default'].createElement(Spinner, null),
+	_react2['default'].createElement(
+		_reactChaffle2['default'],
+		null,
+		' Loading something ...'
+	)
 );
 
 exports['default'] = App;
