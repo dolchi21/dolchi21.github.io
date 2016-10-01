@@ -1,1 +1,24 @@
-dolchi21
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="/node_modules/systemjs/system.js"></script>
+	<script type="text/javascript">
+		SystemJS.config({
+			map : {
+				react : 'https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js',
+				'react-dom' : 'https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min.js',
+				'react-chaffle' : '/node_modules/react-chaffle/dist/react-chaffle.js'
+			}
+		})
+	</script>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript">
+		SystemJS.import('./app.js').then(function(App){
+			App.mount();
+		})
+	</script>
+</body>
+</html>
