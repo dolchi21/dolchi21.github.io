@@ -55,7 +55,7 @@
 <body class="font-pixel">
 	<div id="app"></div>
 	<script type="text/javascript">
-		(function(){
+		function onLoad(){
 			
 			SystemJS.import('./app.js').then(function(App){
 				App.mount()
@@ -63,7 +63,8 @@
 
 			SystemJS.import('./lib/Client.js').then(function(Client){ window.Client = Client })
 
-		})();
+		}
+		window.onload = onLoad;
 	</script>
 </body>
 </html>
