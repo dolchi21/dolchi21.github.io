@@ -1,34 +1,39 @@
-import Promise from 'bluebird'
+module.exports = function memoize(func) {
+	var memo = {};
+	var slice = Array.prototype.slice;
 
-function memoize( fn ) {
-	
-	return function () {
+	return function(){
+		var args = slice.call(arguments)
+		var str = JSON.stringify(args)
 
-		var args = Array.prototype.slice.call(arguments);
-		var i = args.length;
-		
-		var hash = "";
-		var currentArg = null;
-		
-		while (i--) {
-			currentArg = args[i];
-			hash += (currentArg === Object(currentArg)) ? JSON.stringify(currentArg) : currentArg;
-			fn.memoize || (fn.memoize = {});
+		if (str in memo) {
+			return memo[str];
 		}
-		fn.memoize || (fn.memoize = {});
-		
-		//return (hash in fn.memoize) ? fn.memoize[hash] : fn.memoize[hash] = fn.apply(this, args);
-		if (hash in fn.memoize) {
-			if (fn.memoize[hash].isRejected && fn.memoize[hash].isRejected()) {
-				return fn.memoize[hash] = fn.apply(this, args)
+		else {
+			var result = func.apply(this, args)
+			memo[str] = result
+
+			/** if Promise */
+			if (isPromise(result)) {
+				result.catch(function(err){
+					delete memo[str];
+					throw err;
+				})
 			}
-			return fn.memoize[hash];
-		} else {
-			return fn.memoize[hash] = fn.apply(this, args)
+
+			return result
 		}
-
 	}
-
 }
-
-export default memoize
+function isPromise(obj){
+	if (!isObject(obj)) { return false; }
+	var hasThen = isFunction(obj.then)
+	var hasCatch = isFunction(obj.catch)
+	return (hasThen && hasCatch)
+}
+function isObject(value){
+	return (typeof value === typeof {})
+}
+function isFunction(fn){
+	return (typeof fn === typeof function(){})
+}
