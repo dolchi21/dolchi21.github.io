@@ -2,27 +2,68 @@
 <html>
 <head>
 	<title></title>
+	
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+	<style type="text/css">
+		@font-face {
+			font-family: 'Pixeled';
+			src: url('/css/RetroComputer.ttf');
+		}
+		.font-pixel {
+			font-family: 'Pixeled';
+		}
+	</style>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.4.6/bluebird.min.js"></script>
 	<script type="text/javascript" src="/node_modules/systemjs/dist/system.js"></script>
 	<script type="text/javascript">
 		SystemJS.config({
 			map : {
+				axios : '/node_modules/axios/dist/axios.min.js',
+				bluebird : 'https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.4.6/bluebird.min.js',
+				'fast-memoize' : '/node_modules/fast-memoize/dist/fast-memoize.js',
+				memoize : '/memoize.js',
 				react : 'https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js',
 				'react-dom' : 'https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min.js',
 				'react-chaffle' : '/node_modules/react-chaffle/dist/react-chaffle.js'
 			}
 		})
 	</script>
+	<script type="text/javascript">
+		(function(){
+			function importScript(pkg){
+				if (!SystemJS.map[pkg]) { return; }
+				
+				var url = SystemJS.map[pkg];
+				importScript.get(url);
+
+			}
+			importScript.get = function(url){
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', url, false)
+				xhr.send()
+				if (xhr.status === 200) {
+					return xhr.responseText
+				}
+			}
+			window.importScript = importScript;
+		})();
+		react = importScript('react')
+	</script>
 </head>
-<body>
+<body class="font-pixel">
 	<div id="app"></div>
 	<script type="text/javascript">
-		window.onload = function(){
+		(function(){
 			
 			SystemJS.import('./app.js').then(function(App){
 				App.mount()
 			})
-		}
+
+			SystemJS.import('./lib/Client.js').then(function(Client){ window.Client = Client })
+
+		})();
 	</script>
 </body>
 </html>
