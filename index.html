@@ -55,16 +55,26 @@
 <body class="font-pixel">
 	<div id="app"></div>
 	<script type="text/javascript">
-		function onLoad(){
+		(function(){
+			window.onLoadQueue = window.onLoadQueue || []
+			window.onload = function(){
+				window.onLoadQueue.map(function(fn){
+					return fn()
+				})
+			}
+		})();
+		onLoadQueue.push(function AppStart(){
 			
 			SystemJS.import('./app.js').then(function(App){
 				App.mount()
 			})
 
-			SystemJS.import('./lib/Client.js').then(function(Client){ window.Client = Client })
 
-		}
-		window.onload = onLoad;
+		});
+		onLoadQueue.push(function loadClient(){
+			SystemJS.import('./lib/Client.js').then(function(Client){ window.Client = Client })
+		});
+		
 	</script>
 </body>
 </html>
